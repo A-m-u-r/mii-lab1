@@ -1,0 +1,5 @@
+# Python 3.10+. В Google Colab PyTorch обычно уже установлен.
+torch>=2.5
+torchvision>=0.20
+pillow>=10.0
+matplotlib>=3.8
