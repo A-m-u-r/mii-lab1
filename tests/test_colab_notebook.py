@@ -18,6 +18,9 @@ class ColabNotebookTests(unittest.TestCase):
         self.assertIn("files.upload()", cell_sources)
         self.assertIn("run_inference(", cell_sources)
         self.assertIn("plt.show()", cell_sources)
+        self.assertIn("git pull --ff-only", cell_sources)
+        self.assertIn("fonts-dejavu-core", cell_sources)
+        self.assertIn("importlib.reload", cell_sources)
 
 
 if __name__ == "__main__":
