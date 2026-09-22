@@ -59,6 +59,28 @@ def label_font_size(image_size: tuple[int, int]) -> int:
     return max(16, min(28, round(min(image_size) * 0.022)))
 
 
+def load_label_font(font_size: int, image_font: Any = None) -> Any:
+    """Загружает шрифт с кириллицей в Colab, Windows или локальном окружении."""
+    if image_font is None:
+        from PIL import ImageFont
+
+        image_font = ImageFont
+
+    font_paths = (
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+        "C:/Windows/Fonts/arialbd.ttf",
+        "DejaVuSans-Bold.ttf",
+        "arialbd.ttf",
+        "arial.ttf",
+    )
+    for font_path in font_paths:
+        try:
+            return image_font.truetype(font_path, font_size)
+        except OSError:
+            continue
+    return image_font.load_default()
+
+
 def _as_list(value: Any) -> list[Any]:
     """Преобразует список, NumPy-массив или Tensor в обычный Python-список."""
     return value.tolist() if hasattr(value, "tolist") else list(value)
@@ -93,18 +115,12 @@ def keep_labels(detections: Sequence[Detection], allowed_labels: set[str]) -> li
 
 def draw_detections(image: Any, detections: Sequence[Detection]) -> Any:
     """Рисует красные рамки и читаемые подписи на копии изображения."""
-    from PIL import ImageDraw, ImageFont
+    from PIL import ImageDraw
 
     annotated = image.copy()
     painter = ImageDraw.Draw(annotated)
     font_size = label_font_size(annotated.size)
-    try:
-        font = ImageFont.truetype("DejaVuSans-Bold.ttf", font_size)
-    except OSError:
-        try:
-            font = ImageFont.truetype("arial.ttf", font_size)
-        except OSError:
-            font = ImageFont.load_default()
+    font = load_label_font(font_size)
 
     color = (220, 38, 38)
     line_width = max(3, font_size // 12)

@@ -11,6 +11,7 @@ from lab1_faster_rcnn import (
     filter_predictions,
     load_detector,
     label_font_size,
+    load_label_font,
     preprocess_image,
     run_inference,
     translate_label,
@@ -79,6 +80,31 @@ class LabelFontSizeTests(unittest.TestCase):
     def test_scales_label_font_for_large_photographs_with_safe_bounds(self):
         self.assertEqual(label_font_size((4000, 3000)), 28)
         self.assertEqual(label_font_size((640, 480)), 16)
+
+
+class LabelFontTests(unittest.TestCase):
+    def test_prefers_the_colab_dejavu_font_with_cyrillic_support(self):
+        class FakeImageFont:
+            attempts = []
+
+            @classmethod
+            def truetype(cls, path, size):
+                cls.attempts.append((path, size))
+                if path == "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf":
+                    return "colab font"
+                raise OSError
+
+            @staticmethod
+            def load_default():
+                return "fallback font"
+
+        font = load_label_font(21, image_font=FakeImageFont)
+
+        self.assertEqual(font, "colab font")
+        self.assertEqual(
+            FakeImageFont.attempts[0],
+            ("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 21),
+        )
 
 
 class PreprocessImageTests(unittest.TestCase):
