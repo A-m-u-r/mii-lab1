@@ -53,11 +53,19 @@ python lab1_faster_rcnn.py image.jpg --only-person --threshold 0.8
 
 ## Google Colab
 
-В первой ячейке Colab выполните:
+Для сдачи в виде одного документа откройте готовый ноутбук:
+
+[Открыть лабораторную в Google Colab](https://colab.research.google.com/github/A-m-u-r/mii-lab1/blob/main/lab1_faster_rcnn_colab.ipynb)
+
+В нём уже есть ячейки с полным кодом, загрузкой фотографии, инференсом и
+выводом итогового изображения. Запустите все ячейки, загрузите свою фотографию,
+затем сохраните копию в Google Drive или скачайте `.ipynb` для сдачи.
+
+Если нужно создать такой ноутбук вручную, в первой ячейке выполните:
 
 ```python
-!git clone https://github.com/RadaevKirill/danger-zone-detection.git
-%cd danger-zone-detection
+!git clone https://github.com/A-m-u-r/mii-lab1.git
+%cd mii-lab1
 !pip install -q -r requirements-lab1.txt
 
 from google.colab import files
